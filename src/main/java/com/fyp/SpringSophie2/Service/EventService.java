@@ -45,6 +45,7 @@ public class EventService {
         event.setEventID(eventDTO.getEventID());
         event.setEventName(eventDTO.getEventName());
         event.setEventDate(eventDTO.getEventDate());
+        event.setEventStatus("Pending"); //Set default status for a new event
 
         Event savedEvent = eventRepository.save(event);
         return new EventDTO(savedEvent.getEventID(), savedEvent.getEventName(), savedEvent.getEventDate(), savedEvent.getEventStatus(), 0.0);

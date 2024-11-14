@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/events")
+@RequestMapping("/api/events") //local host source for api-events
 public class EventController {
 
     private final EventService eventService;
@@ -18,6 +18,7 @@ public class EventController {
         this.eventService = eventService;
     }
 
+    //Get all events
     @GetMapping
     public ResponseEntity<List<EventDTO>> getAllEvents() {
         List<EventDTO> events = eventService.getAllEventsWithTaskCompletion();

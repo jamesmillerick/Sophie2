@@ -3,73 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Event Dashboard</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    .event-card {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin: 10px 0;
-      border-radius: 8px;
-    }
-    .event-name {
-      font-size: 1.2em;
-      font-weight: bold;
-    }
-    .progress-bar {
-      width: 100%;
-      height: 8px;
-      background-color: #eee;
-      border-radius: 4px;
-      margin-top: 5px;
-    }
-    .progress-fill {
-      height: 100%;
-      background-color: #4caf50;
-      border-radius: 4px;
-    }
-  </style>
+  <title>Event Manager Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-<h1>Event Dashboard</h1>
-<div id="dashboard"></div>
-
-<script>
-  async function loadDashboard() {
-    const response = await fetch('/api/events');
-    const events = await response.json();
-
-    const dashboard = document.getElementById('dashboard');
-    events.forEach(event => {
-      const eventCard = document.createElement('div');
-      eventCard.className = 'event-card';
-
-      const eventName = document.createElement('div');
-      eventName.className = 'event-name';
-      eventName.innerText = `${event.name} - ${event.status}`;
-
-      const eventDate = document.createElement('div');
-      eventDate.innerText = `Date: ${event.date}`;
-
-      const progressContainer = document.createElement('div');
-      progressContainer.className = 'progress-bar';
-      const progressFill = document.createElement('div');
-      progressFill.className = 'progress-fill';
-      progressFill.style.width = `${event.completionPercentage}%`;
-      progressContainer.appendChild(progressFill);
-
-      eventCard.appendChild(eventName);
-      eventCard.appendChild(eventDate);
-      eventCard.appendChild(progressContainer);
-
-      dashboard.appendChild(eventCard);
-    });
-  }
-
-  window.onload = loadDashboard;
-</script>
+<div class="dashboard-container">
+  <header>
+    <h1>Event Manager Dashboard</h1>
+    <button id="createEventBtn">Create New Event</button>
+  </header>
+  <section id="eventList">
+    <!-- Event cards will be dynamically inserted here -->
+  </section>
+</div>
+<script src="dashboard.js"></script>
 </body>
 </html>
