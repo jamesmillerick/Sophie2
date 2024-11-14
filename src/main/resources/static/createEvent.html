@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Event</title>
+  <style>
+    /* Basic styles for form layout */
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Create New Event</h1>
+  <form id="eventForm">
+    <label>Event Name:</label>
+    <input type="text" name="eventName" required>
+    <label>Event Date:</label>
+    <input type="date" name="eventDate" required>
+
+    <h2>Tasks</h2>
+    <div id="tasksSection">
+      <!-- Dynamic Task Assignment Fields -->
+    </div>
+
+    <button type="button" onclick="addTask()">Add Task</button>
+    <button type="submit">Create Event</button>
+  </form>
+</div>
+
+<script>
+  // JavaScript function to add a new task section
+  function addTask() {
+    const taskSection = document.getElementById("tasksSection");
+    const taskDiv = document.createElement("div");
+
+    taskDiv.innerHTML = `
+               <label>Task Name:</label>
+               <input type="text" name="taskName[]" required>
+               <label>Assign to Staff:</label>
+               <input type="text" name="assignedStaff[]" required>
+               <label>Task Deadline:</label>
+               <input type="date" name="taskDeadline[]" required>
+           `;
+
+    taskSection.appendChild(taskDiv);
+  }
+
+  // JavaScript for form submission
+  document.getElementById('eventForm').onsubmit = async function(event) {
+    event.preventDefault();
+
+    // Gather form data
+    const formData = new FormData(event.target);
+
+    // Convert formData to JSON format
+    const data = {};
+    formData.forEach((value, key) => {
+      // Handle multiple tasks (arrays)
+      if (data[key]) {
+        if (Array.isArray(data[key])) {
+          data[key].push(value);
+        } else {
+          data[key] = [data[key], value];
+        }
+      } else {
+        data[key] = value;
+      }
+    });
+
+    console.log("Form Data:", data);
+
+    // Here you can send the data to the backend
+    // const response = await fetch('/api/events', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify(data)
+    // });
+    // const result = await response.json();
+    // console.log(result);
+
+  };
+</script>
+</body>
+</html>

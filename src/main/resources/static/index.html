@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOPHIE - Task Management</title>
+  <style>
+    /* Basic reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Center body content */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Phone frame styling */
+    .phone-frame {
+      width: 360px;
+      height: 700px;
+      background-color: #000;
+      border-radius: 35px;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Speaker and home button on the phone */
+    .speaker {
+      width: 60px;
+      height: 5px;
+      background-color: #333;
+      border-radius: 2px;
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .home-button {
+      width: 40px;
+      height: 40px;
+      background-color: #333;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+    }
+
+    /* App container inside the phone */
+    .app-container {
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
+      border-radius: 30px;
+      padding: 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    /* App title styling */
+    .app-title {
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #ff69b4;
+    }
+
+    /* Button styling */
+    .button {
+      display: block;
+      width: 100%;
+      padding: 15px 0;
+      margin: 20px 0;
+      background-color: #ff69b4;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background-color: #ff85c3;
+    }
+
+  </style>
+</head>
+<body>
+<!-- Phone frame -->
+<div class="phone-frame">
+  <div class="speaker"></div>
+
+  <!-- App container -->
+  <div class="app-container">
+    <h1 class="app-title">SOPHIE</h1>
+
+    <!-- Buttons and home button -->
+    <button class="button" onclick="window.location.href='taskCreate.html';">Create a new task!</button>
+    <button class="button" onclick="window.location.href='findTask.html';">Find a task</button>
+
+    <div class="home-button" onclick="window.location.href='index.html';"></div>
+  </div>
+</div>
+</body>
+</html>
