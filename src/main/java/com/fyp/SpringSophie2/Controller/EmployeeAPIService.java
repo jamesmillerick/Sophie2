@@ -27,9 +27,12 @@ public class EmployeeAPIService {
     /*
     authenticate function comes from ChatGPT - assists in the servlet-based login format
      */
+
     public Employee authenticate(String username, String password) { // Query your database to verify credentials
         return employeeRepository.findByUsernameAndPassword(username, password);
     }
+
+
 
 
 
@@ -63,6 +66,7 @@ by ThinkConstructive, published Oct 2023 - https://www.youtube.com/watch?v=FRT38
     @PutMapping("{username}") //@PutMapping annotation allows the user to update any username credentials in the PostgresSQL database in the employee table
     public ResponseEntity<Employee> updateEmployeeDetails(@PathVariable String username, @RequestBody Employee employeeDetails) {
         return employeeRepository.findById(username).map(employee -> {
+            employee.setUsername(employeeDetails.getUsername());
             employee.setfName(employeeDetails.getfName());
             employee.setsName(employeeDetails.getsName());
             employee.setRole(employeeDetails.getRole());

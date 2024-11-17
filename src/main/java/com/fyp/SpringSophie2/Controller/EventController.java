@@ -1,3 +1,4 @@
+/*
 package com.fyp.SpringSophie2.Controller;
 
 import com.fyp.SpringSophie2.Service.EventService;
@@ -21,13 +22,14 @@ public class EventController {
     //Get all events
     @GetMapping
     public ResponseEntity<List<EventDTO>> getAllEvents() {
-        List<EventDTO> events = eventService.getAllEventsWithTaskCompletion();
+        List<EventDTO> events = eventService.getAllEvents();
         return ResponseEntity.ok(events);
     }
 
     // Create a new event
     @PostMapping
     public ResponseEntity<EventDTO> createEvent(@RequestBody EventDTO eventDTO) {
+        System.out.println("Received request to create event: " + eventDTO);
         EventDTO createdEvent = eventService.createEvent(eventDTO);
         return ResponseEntity.ok(createdEvent);
     }
@@ -42,3 +44,4 @@ public class EventController {
         return ResponseEntity.ok(assignedTask);
     }
 }
+*/
