@@ -1,7 +1,12 @@
 package com.fyp.SpringSophie2.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
+@Setter
+@Getter
 public class EventDTO {
 
     private String eventID;
@@ -21,43 +26,4 @@ public class EventDTO {
 
     //Getters and Setters for all attributes
 
-    public String getEventID() {
-        return eventID;
-    }
-
-    public void setEventID(String eventID) {
-        this.eventID = eventID;
-    }
-
-    public String getEventName() {
-        return eventName;
-    }
-
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
-    }
-
-    public LocalDate getEventDate() {
-        return eventDate;
-    }
-
-    public void setEventDate(LocalDate eventDate) {
-        this.eventDate = eventDate;
-    }
-
-    public String getEventStatus() {
-        return eventStatus;
-    }
-
-    public void setEventStatus(String eventStatus) {
-        this.eventStatus = eventStatus;
-    }
-
-    public Double getEventCompletionPercentage() {
-        return eventCompletionPercentage;
-    }
-
-    public void setEventCompletionPercentage(Double eventCompletionPercentage) {
-        this.eventCompletionPercentage = eventCompletionPercentage;
-    }
 }

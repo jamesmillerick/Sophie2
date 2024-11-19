@@ -1,3 +1,4 @@
+/*
 package com.fyp.SpringSophie2.Servlet;
 
 import com.fyp.SpringSophie2.model.Event;
@@ -26,6 +27,7 @@ public class EventServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         // Fetch all events from the database
         try {
             List<Event> events = EventService.getAllEvents();
@@ -72,4 +74,6 @@ public class EventServlet extends HttpServlet {
 
 
 }
+
+ */
 

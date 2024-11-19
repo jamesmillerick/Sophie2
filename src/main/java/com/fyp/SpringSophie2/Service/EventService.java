@@ -62,4 +62,79 @@ public class EventService {
         Task savedTask = taskRepository.save(task);
         return savedTask;  // Return the saved task
     }
+
+    public List<EventDTO> getAllEvents() {
+        List<Event> events = eventRepository.findAll();
+        List<EventDTO> eventDTOs = new ArrayList<>();
+        for (Event event : events) {
+            eventDTOs.add(new EventDTO(event.getEventID(), event.getEventName(), event.getEventDate(), event.getEventStatus(), 0.0));
+        }
+        return eventDTOs;
+    }
+
+
 }
+
+
+/*
+package com.fyp.SpringSophie2.Service;
+
+import com.fyp.SpringSophie2.model.Event;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class EventService {
+
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/FypSophie";
+    private static final String DB_USER = "postgres";
+    private static final String DB_PASSWORD = "1234";
+
+    public static List<Event> getAllEvents() throws SQLException {
+        List<Event> events = new ArrayList<>();
+
+        String query = "SELECT * FROM event";
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                Event event = new Event();
+                event.setEventID(resultSet.getString("id"));
+                event.setEventName(resultSet.getString("name"));
+                event.setEventDate(resultSet.getDate("date").toLocalDate());
+                event.setEventStatus(resultSet.getString("status"));
+                events.add(event);
+            }
+        }
+        return events;
+    }
+
+    public void addEvent(Event event) throws SQLException {
+        String query = "INSERT INTO event (eventid, event_name, event_date, event_status) VALUES (?, ?, ?, ?)";
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, event.getEventID());
+            preparedStatement.setString(2, event.getEventName());
+            preparedStatement.setDate(3, Date.valueOf(event.getEventDate()));
+            preparedStatement.setString(4, event.getEventStatus());
+
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    public void deleteEvent(String eventID) throws SQLException {
+        String query = "DELETE FROM event WHERE eventid = ?";
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, eventID);
+            preparedStatement.executeUpdate();
+        }
+
+    }
+}
+
+ */
