@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeTaskModalBtn = document.querySelector('.close-task-btn');
     const taskForm = document.getElementById('taskForm');
 
+    /*
+    JavaScript async/await and try/catch - Beginner's Guide, (Jan 2023), published by @uniswann on YouTube
+     */
     // Function to fetch events from the backend
     async function fetchEvents() {
         try {
@@ -19,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const events = await response.json();
 
+            /*
+            "JavaScript/HTML Dynamic Tables", published by Dennis Ivy, available from YouTube (Nov 2019)
+             */
             // Populate the table with data
             tableBody.innerHTML = ''; // Clear any existing rows
             events.forEach(event => {
@@ -49,6 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.style.display = 'none';
     });
 
+    /*
+    ChatGPT - Query: I am trying to create a button called "Create a new Event" but I am trying to find a way to submit the info and allow it to Post the information to the database, then update the table
+     */
     // Submit new event
     eventForm.addEventListener('submit', async (e) => {
         e.preventDefault();
