@@ -4,6 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('eventModal');
     const closeModalBtn = document.querySelector('.close-btn');
     const eventForm = document.getElementById('eventForm');
+    const assignTaskBtn = document.getElementById('assignTaskBtn');
+    const taskModal = document.getElementById('taskModal');
+    const closeTaskModalBtn = document.querySelector('.close-task-btn');
+    const taskForm = document.getElementById('taskForm');
 
     // Function to fetch events from the backend
     async function fetchEvents() {
@@ -31,6 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error fetching events:', error);
         }
     }
+    // Call the function to fetch and display events
+    fetchEvents();
+});
 
     // Show modal
     createEventBtn.addEventListener('click', () => {
@@ -74,7 +81,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Call the function to fetch and display events
-    fetchEvents();
+    /*
+    // Show modal
+    assignTaskBtn.addEventListener('click', () => {
+        taskModal.style.display = 'flex';
+    });
+
+    // Hide modal
+    closeTaskModalBtn.addEventListener('click', () => {
+        taskModal.style.display = 'none';
+    });
+
+
+    // Submit new task
+    taskForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newTask = {
+            eventID: taskForm.eventID.value,
+            taskName: taskForm.taskName.value,
+            taskDescription: taskForm.taskDescription.value,
+            dueDate: taskForm.dueDate.value,
+        };
+
+        try {
+            const response = await fetch(`/events/${newTask.eventID}/assign-task`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(newTask).toString(),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to assign task');
+            }
+
+            taskModal.style.display = 'none';
+            taskForm.reset();
+            alert('Task assigned successfully!');
+        } catch (error) {
+            console.error('Error assigning task:', error);
+        }
 });
+
+     */
+
+    /*
+    dashboard.js is created using ChatGPT - Query: "Create a JavaScript page to integrate my EventDashboard and enable functionality for the buttons and modals"
+     */
+
+
 

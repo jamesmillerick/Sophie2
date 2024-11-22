@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task list page</title>
+    <link rel="stylesheet" href="../static/css/dashboard.css">
+</head>
+<body>
+<header>
+    <h1>Task List</h1>
+    <button class="button" onclick="window.location.href='taskCreate.html';">Create a new task!</button>
+</header>
+
+<!-- <main> table comes from IS3312 Advanced Programming project -->
+<main>
+    <table id="taskTable" class="table">
+        <thead>
+        <tr>
+            <th>taskID</th>
+            <th>Description</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Event</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Rows will be dynamically added here -->
+        </tbody>
+    </table>
+</main>
+
+</body>
+</html>

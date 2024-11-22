@@ -1,15 +1,24 @@
 package com.fyp.SpringSophie2.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
+/*
+Lombok was suggested by a colleague in my year due to its ability to help reduce boilerplate code and improve development of my project
+ */
+
+@Setter
+@Getter
 @Entity
 public class Task {
+    // Getters and setters for all attributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int taskID;
-    private String taskName;
+    private String taskDescription;
     private LocalDate dueDate;
     private String eventStatus;
     private String eventID;
@@ -20,9 +29,9 @@ public class Task {
 
 
 
-    public Task(int taskID, String taskName, LocalDate dueDate, String eventStatus, String eventID) {
+    public Task(int taskID, String taskDescription, LocalDate dueDate, String eventStatus, String eventID) {
         this.taskID = taskID;
-        this.taskName = taskName;
+        this.taskDescription = taskDescription;
         this.dueDate = dueDate;
         this.eventStatus = eventStatus;
         this.eventID = eventID;
@@ -31,17 +40,4 @@ public class Task {
 
     }
 
-    // Getters and setters for all attributes
-    public int getTaskID() { return taskID; }
-    public void setTaskID(int taskID) { this.taskID = taskID; }
-    public String getTaskName() { return taskName; }
-    public void setTaskName(String taskName) { this.taskName = taskName; }
-    public Employee getAssignedEmployee() { return assignedEmployee; }
-    public void setAssignedEmployee(Employee assignedEmployee) { this.assignedEmployee = assignedEmployee; }
-    public LocalDate getDueDate() {return dueDate;}
-    public void setDueDate(LocalDate dueDate) {this.dueDate = dueDate;}
-    public String getEventStatus() {return eventStatus;}
-    public void setEventStatus(String eventStatus) {this.eventStatus = eventStatus;}
-    public String getEventID() {return eventID;}
-    public void setEventID(String eventID) {this.eventID = eventID;}
 }

@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
+/*
+CRUD operation (RequestMapping, GetMapping and PostMapping annotations) comes from "Java REST API with Spring Boot Tutorial | REST API CRUD Implementation"
+by ThinkConstructive, published Oct 2023 - https://www.youtube.com/watch?v=FRT38sQeZ-w
+ */
 @RestController
 @RequestMapping("/api/events") //local host source for events
 public class EventController {
@@ -55,11 +59,20 @@ public class EventController {
  */
 
     // Assign tasks to an event
-    @PostMapping("/{eventID}/tasks")
+    @PostMapping("/{eventID}/assign-task")
     public ResponseEntity<Task> assignTaskToEvent(
             @PathVariable String eventID,
-            @RequestBody Task task
-    ) {
+            @RequestParam int taskID,
+            @RequestParam String taskDescription,
+            @RequestParam String dueDate,
+            @RequestParam String eventStatus)
+    {
+        Task task = new Task();
+        task.setTaskID(taskID);
+        task.setTaskDescription(taskDescription);
+        task.setDueDate(LocalDate.parse(dueDate));
+        task.setEventStatus(eventStatus);
+
         Task assignedTask = eventService.assignTaskToEvent(eventID, task);
         return ResponseEntity.ok(assignedTask);
     }

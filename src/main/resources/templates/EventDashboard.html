@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Event Table</title>
-  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+  <script th:src="@{/js/dashboard.js}"></script>
+
 </head>
 <body>
 <header>
@@ -27,7 +29,7 @@
     </tbody>
   </table>
 
-  <!-- Modal for creating a new event -->
+  <!-- Modal for creating a new event. This code was requested from ChatGPT. I asked for a way to create a pop-up display to be able to create a new event -->
   <div id="eventModal" class="modal">
     <div class="modal-content">
       <span class="close-btn">&times;</span>
@@ -53,8 +55,32 @@
       </form>
     </div>
   </div>
-</main>
 
-<script src="dashboard.js"></script>
+  <!-- Button to Assign Task -->
+  <button id="assignTaskBtn" class="button">Assign Task to Event</button>
+
+  <!-- Modal for Assigning Tasks: This code was requested from ChatGPT. I asked for a way to create a pop-up display to be able to assign a task-->
+  <div id="taskModal" class="modal">
+    <div class="modal-content">
+      <span class="close-task-btn">&times;</span>
+      <h2>Assign Task to Event</h2>
+      <form id="taskForm">
+        <label for="taskEventID">Event ID:</label>
+        <input type="text" id="taskEventID" name="eventID" required>
+
+        <label for="taskName">Task Name:</label>
+        <input type="text" id="taskName" name="taskName" required>
+
+        <label for="taskDescription">Task Description:</label>
+        <textarea id="taskDescription" name="taskDescription" required></textarea>
+
+        <label for="dueDate">Due Date:</label>
+        <input type="date" id="dueDate" name="dueDate" required>
+
+        <button type="submit" class="button">Submit</button>
+      </form>
+    </div>
+  </div>
+</main>
 </body>
 </html>

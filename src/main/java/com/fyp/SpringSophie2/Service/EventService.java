@@ -31,7 +31,14 @@ public class EventService {
             List<Task> tasks = taskRepository.findByEventID(event.getEventID());
             int completedTasks = (int) tasks.stream().filter(task -> task.getEventStatus().equals("Completed")).count();
             int totalTasks = tasks.size();
+
+            /*
+            Code to calculate "EventCompletionPercentage" comes from ChatGPT - Query: I want to be able to return a percentage of tasks completed for an event to display
+             on my event dashboard, given my current code, what is the best way to do that?
+             */
             double EventCompletionPercentage = totalTasks > 0 ? (completedTasks * 100.0 / totalTasks) : 0; // the maths to calculate the percentage value
+
+
 
             eventDTOs.add(new EventDTO(event.getEventID(), event.getEventName(), event.getEventDate(), event.getEventStatus(), EventCompletionPercentage));
         }
@@ -39,7 +46,7 @@ public class EventService {
         return eventDTOs;
     }
 
-    // Method to create a new event
+    // The createEvent method creates a new event by mapping details from an EventDTO object to an Event entity
     public EventDTO createEvent(EventDTO eventDTO) {
         Event event = new Event();
         event.setEventID(eventDTO.getEventID());
@@ -47,11 +54,12 @@ public class EventService {
         event.setEventDate(eventDTO.getEventDate());
         event.setEventStatus("Pending"); //Set default status for a new event
 
+        //Returns the saved event as a new EventDTO
         Event savedEvent = eventRepository.save(event);
         return new EventDTO(savedEvent.getEventID(), savedEvent.getEventName(), savedEvent.getEventDate(), savedEvent.getEventStatus(), 0.0);
     }
 
-    // Method to assign a task to an event
+    // The assignTaskToEvent method assigns a new task to an event by associating the event ID with the task and setting its default status to "Pending" before saving it to the database.
     public Task assignTaskToEvent(String eventID, Task task) {
         Event event = eventRepository.findById(eventID)
                 .orElseThrow(() -> new NoSuchElementException("Event not found"));
@@ -59,10 +67,10 @@ public class EventService {
         task.setEventID(eventID);  // Set the event ID for the task
         task.setEventStatus("Pending"); // Default status when assigning a task
 
-        Task savedTask = taskRepository.save(task);
-        return savedTask;  // Return the saved task
+        return taskRepository.save(task);  // Return the saved task
     }
 
+    //The getAllEvents method retrieves all events from the database, converts them into a list of EventDTO objects, and returns this list.
     public List<EventDTO> getAllEvents() {
         List<Event> events = eventRepository.findAll();
         List<EventDTO> eventDTOs = new ArrayList<>();

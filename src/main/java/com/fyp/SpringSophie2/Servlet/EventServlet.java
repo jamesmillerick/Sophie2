@@ -14,6 +14,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
+/*
+This code is taken from my IS3312 Advanced Programming with Java module, we used Web Servlets to integrate our web application, it is then adapted to my project with the necessary changes.
+ */
+/*
 @WebServlet("/events")
 public class EventServlet extends HttpServlet {
 
