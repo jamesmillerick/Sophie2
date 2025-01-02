@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.3.5'
+    id 'org.springframework.boot' version '3.3.5' //Use the latest version
     id 'io.spring.dependency-management' version '1.1.6'
 }
 
@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(17) //Use the appropriate Java version
     }
 }
 
@@ -24,18 +24,17 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'javax.servlet:jstl:1.2'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa' //For JPA
+    implementation 'org.springframework.boot:spring-boot-starter-security'//For security
+    implementation 'org.springframework.boot:spring-boot-starter-web' //For web applications
+    implementation 'javax.servlet:jstl:1.2' //If using JSP
+    implementation 'org.postgresql:postgresql:42.6.0' //Postgresql JDBC Driver
     implementation 'com.google.code.gson:gson:2.8.9'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    compileOnly 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' //For Thymeleaf
+    compileOnly 'org.projectlombok:lombok' //For Lombok annotation processing
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'org.postgresql:postgresql'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    annotationProcessor 'org.projectlombok:lombok' //For Lombok annotation processing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test' //For testing
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 

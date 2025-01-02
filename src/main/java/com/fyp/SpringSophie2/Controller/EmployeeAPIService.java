@@ -1,3 +1,4 @@
+/*
 package com.fyp.SpringSophie2.Controller;
 
 import com.fyp.SpringSophie2.Repository.EmployeeRepository;
@@ -11,7 +12,7 @@ import java.util.List;
 /*
 RestController comes from "Java REST API with Spring Boot Tutorial | REST API CRUD Implementation"
 by ThinkConstructive, published Oct 2023 - https://www.youtube.com/watch?v=FRT38sQeZ-w
- */
+
 
 @RestController
 @RequestMapping("/employee")
@@ -20,13 +21,13 @@ public class EmployeeAPIService {
     /*
     @Autowired annotation came from ChatGPT, it was a more effective way to enable loose coupling between
     the interface and the controller class
-     */
+     *
     @Autowired
     private EmployeeRepository employeeRepository;  //Injects the EmployeeRepository into my controller class (EmployeeAPIService)
 
     /*
     authenticate function comes from ChatGPT - assists in the servlet-based login format
-     */
+     *
 
     public Employee authenticate(String username, String password) { // Query your database to verify credentials
         return employeeRepository.findByUsernameAndPassword(username, password);
@@ -50,7 +51,7 @@ public class EmployeeAPIService {
     /*
     Annotation comes from "Java REST API with Spring Boot Tutorial | REST API CRUD Implementation"
 by ThinkConstructive, published Oct 2023 - https://www.youtube.com/watch?v=FRT38sQeZ-w
-     */
+     *
     @PostMapping
     //PostMapping annotation allows the user to create a username and fill in rest of user credentials into the PostgresSQL database in the employee table
     public ResponseEntity<Employee> createEmployeeDetails(@RequestBody Employee employee) {
@@ -62,7 +63,7 @@ by ThinkConstructive, published Oct 2023 - https://www.youtube.com/watch?v=FRT38
     /*
 Annotation comes from "Java REST API with Spring Boot Tutorial | REST API CRUD Implementation"
 by ThinkConstructive, published Oct 2023 - https://www.youtube.com/watch?v=FRT38sQeZ-w
- */
+ *
     @PutMapping("{username}") //@PutMapping annotation allows the user to update any username credentials in the PostgresSQL database in the employee table
     public ResponseEntity<Employee> updateEmployeeDetails(@PathVariable String username, @RequestBody Employee employeeDetails) {
         return employeeRepository.findById(username).map(employee -> {
@@ -81,7 +82,7 @@ by ThinkConstructive, published Oct 2023 - https://www.youtube.com/watch?v=FRT38
     /*
     Annotation comes from "Java REST API with Spring Boot Tutorial | REST API CRUD Implementation"
 by ThinkConstructive, published Oct 2023 - https://www.youtube.com/watch?v=FRT38sQeZ-w
-     */
+     *
     @DeleteMapping("{username}") //@DeleteMapping annotation should allow the user to delete any staff from the PostgresSQL database in the employees table
     public ResponseEntity<Void> deleteEmployeeDetails(@PathVariable String username) {
         if (employeeRepository.existsById(username)) {
@@ -94,3 +95,5 @@ by ThinkConstructive, published Oct 2023 - https://www.youtube.com/watch?v=FRT38
 
 
 }
+
+ */

@@ -1,3 +1,4 @@
+/*
 package com.fyp.SpringSophie2.Controller;
 
 import com.fyp.SpringSophie2.model.Employee;
@@ -18,7 +19,7 @@ public class LoginServlet extends HttpServlet {
 
     /*
     Code taken from IS3312 Project - material covered in tutor classes (adapted to my project)
-     */
+     *
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
@@ -44,3 +45,5 @@ public class LoginServlet extends HttpServlet {
         }
     }
 }
+
+ */

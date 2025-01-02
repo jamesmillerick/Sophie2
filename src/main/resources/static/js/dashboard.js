@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /*
     JavaScript async/await and try/catch - Beginner's Guide, (Jan 2023), published by @uniswann on YouTube
      */
+
     // Function to fetch events from the backend
     async function fetchEvents() {
         try {
@@ -41,9 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error fetching events:', error);
         }
     }
+
+    /*
     // Call the function to fetch and display events
     fetchEvents();
-});
+     */
+
+    //Corrected calling - Ensure fetchEvents is called and awaited properly
+    (async () => {
+        await fetchEvents(); // Await the fetchEvents call to ensure events are fetched first
+    })();
+
 
     // Show modal
     createEventBtn.addEventListener('click', () => {
@@ -81,8 +90,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Failed to create new event');
             }
 
+            // Await fetchEvents to ensure it fetches updated data after the new event is created
+            await fetchEvents(); // This ensures the table is updated after adding the new event
+
             // Refresh the table and close the modal
-            fetchEvents();
             modal.style.display = 'none';
             eventForm.reset();
         } catch (error) {
@@ -90,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    /*
+
     // Show modal
     assignTaskBtn.addEventListener('click', () => {
         taskModal.style.display = 'flex';
@@ -131,9 +142,12 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Error assigning task:', error);
         }
+    });
 });
 
-     */
+
+
+
 
     /*
     dashboard.js is created using ChatGPT - Query: "Create a JavaScript page to integrate my EventDashboard and enable functionality for the buttons and modals"

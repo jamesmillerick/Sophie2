@@ -1,5 +1,93 @@
 package com.fyp.SpringSophie2.Service;
 
+
+import com.fyp.SpringSophie2.Repository.EventRepository;
+import com.fyp.SpringSophie2.model.Event;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class EventService {
+
+    private final EventRepository eventRepository;
+
+    @Autowired
+    public EventService(EventRepository eventRepository) {
+        this.eventRepository = eventRepository;
+    }
+
+    //Get all events
+    public List<Event> getAllEvents() {
+        return eventRepository.findAll();
+    }
+
+    //Get an event by its ID
+    public Optional<Event> getEventById(String eventID) {
+        return eventRepository.findById(eventID);
+    }
+
+    //Create a new event
+    public Event createEvent(Event event) {
+        return eventRepository.save(event);
+    }
+
+    //Update an existing event
+    public Event updateEvent(String eventID, Event updatedEvent) {
+        return eventRepository.findById(eventID)
+                .map(event -> {
+                    event.setEventName(updatedEvent.getEventName());
+                    event.setEventDate(updatedEvent.getEventDate());
+                    event.setEventStatus(updatedEvent.getEventStatus());
+                    return eventRepository.save(event);
+                })
+                .orElseThrow(() -> new RuntimeException("Event not found with ID: " + eventID));
+    }
+
+    //Delete an event by its ID
+    public void deleteEvent(String eventID) {
+        if (eventRepository.existsById(eventID)) {
+            eventRepository.deleteById(eventID);
+        } else {
+            throw new RuntimeException("Event not found with ID: " + eventID);
+        }
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 import com.fyp.SpringSophie2.Repository.EventRepository;
 import com.fyp.SpringSophie2.Repository.TaskRepository;
 import com.fyp.SpringSophie2.model.Event;
@@ -36,11 +124,14 @@ public class EventService {
             Code to calculate "EventCompletionPercentage" comes from ChatGPT - Query: I want to be able to return a percentage of tasks completed for an event to display
              on my event dashboard, given my current code, what is the best way to do that?
              */
+            /*
             double EventCompletionPercentage = totalTasks > 0 ? (completedTasks * 100.0 / totalTasks) : 0; // the maths to calculate the percentage value
 
+             *
 
 
-            eventDTOs.add(new EventDTO(event.getEventID(), event.getEventName(), event.getEventDate(), event.getEventStatus(), EventCompletionPercentage));
+
+            eventDTOs.add(new EventDTO(event.getEventID(), event.getEventName(), event.getEventDate(), event.getEventStatus()));
         }
 
         return eventDTOs;
@@ -56,7 +147,7 @@ public class EventService {
 
         //Returns the saved event as a new EventDTO
         Event savedEvent = eventRepository.save(event);
-        return new EventDTO(savedEvent.getEventID(), savedEvent.getEventName(), savedEvent.getEventDate(), savedEvent.getEventStatus(), 0.0);
+        return new EventDTO(savedEvent.getEventID(), savedEvent.getEventName(), savedEvent.getEventDate(), savedEvent.getEventStatus());
     }
 
     // The assignTaskToEvent method assigns a new task to an event by associating the event ID with the task and setting its default status to "Pending" before saving it to the database.
@@ -75,13 +166,31 @@ public class EventService {
         List<Event> events = eventRepository.findAll();
         List<EventDTO> eventDTOs = new ArrayList<>();
         for (Event event : events) {
-            eventDTOs.add(new EventDTO(event.getEventID(), event.getEventName(), event.getEventDate(), event.getEventStatus(), 0.0));
+            eventDTOs.add(new EventDTO(event.getEventID(), event.getEventName(), event.getEventDate(), event.getEventStatus()));
         }
         return eventDTOs;
     }
 
 
 }
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*

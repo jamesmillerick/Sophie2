@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, String> {
-    Employee findByUsernameAndPassword(String username, String password);
 }
 /*
 This was suggested by ChatGPT, because repositories in Spring Data JPA

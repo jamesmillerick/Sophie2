@@ -13,15 +13,19 @@ public class EventDTO {
     private String eventName;
     private LocalDate eventDate;
     private String eventStatus;
-    private Double eventCompletionPercentage;
+    /*private Double eventCompletionPercentage;
+
+     */
 
     //Parameterised Constructors for all attributes
-    public EventDTO(String eventID, String eventName, LocalDate eventDate, String eventStatus, Double eventCompletionPercentage) {
+    public EventDTO(String eventID, String eventName, LocalDate eventDate, String eventStatus) {
         this.eventID = eventID;
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.eventStatus = eventStatus;
-        this.eventCompletionPercentage = eventCompletionPercentage;
+        /*this.eventCompletionPercentage = eventCompletionPercentage;
+
+         */
     }
 
     //Getters and Setters for all attributes

@@ -2,11 +2,16 @@ package com.fyp.SpringSophie2.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
+@Setter
+@Getter
 @Entity
 public class Event {
+    // Getters and setters for all attributes
     @Id
     private String eventID;
 
@@ -26,38 +31,5 @@ public class Event {
     public Event() {
     }
 
-
-    // Getters and setters for all attributes
-    public String getEventID() {
-        return eventID;
-    }
-
-    public String getEventName() {
-        return eventName;
-    }
-
-    public LocalDate getEventDate() {
-        return eventDate;
-    }
-
-    public String getEventStatus() {
-        return eventStatus;
-    }
-
-    public void setEventID(String eventID) {
-        this.eventID = eventID;
-    }
-
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
-    }
-
-    public void setEventDate(LocalDate eventDate) {
-        this.eventDate = eventDate;
-    }
-
-    public void setEventStatus(String eventStatus) {
-        this.eventStatus = eventStatus;
-    }
 
 }
