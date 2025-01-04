@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Task</title>
+</head>
+<body>
+<h2>Task Details</h2>
+<p><strong>Task Name:</strong> <span th:text="${task.taskName}"></span></p>
+<p><strong>Task Description:</strong> <span th:text="${task.taskDescription}"></span></p>
+<p><strong>Task Status:</strong> <span th:text="${task.taskStatus}"></span></p>
+<p><strong>Assigned Employee:</strong> <span th:text="${task.assignedEmployee.firstName} + ' ' + ${task.assignedEmployee.lastName}"></span></p>
+<p><strong>Event:</strong> <span th:text="${task.event.eventName}"></span></p>
+<a href="#" th:href="@{/tasks/{taskId}/edit(taskId=${task.taskId})}">Edit Task</a><br/>
+<a href="#" th:href="@{/tasks/{taskId}/delete(taskId=${task.taskId})}">Delete Task</a>
+</body>
+</html>

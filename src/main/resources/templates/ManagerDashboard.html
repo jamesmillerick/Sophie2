@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            padding: 1em;
+            background-color: #0056b3; /* Darker blue for better contrast */
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .grid-item {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #ffffff; /* White background for cards */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .dashboard-button {
+            display: inline-block;
+            background-color: #004085; /* Dark blue button */
+            color: white;
+            text-decoration: none;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .dashboard-button:hover {
+            background-color: #0056b3; /* Lighter blue on hover */
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fafafa; /* Light gray background for tables */
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #004085; /* Dark blue for table headers */
+            color: white; /* White text for contrast */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* Alternate row background for better readability */
+        }
+
+        tr:hover {
+            background-color: #e0f3ff; /* Highlight row on hover */
+        }
+
+        td {
+            color: #333; /* Dark gray text for better contrast */
+        }
+
+        /* Scrollable Tables */
+        .scrollable {
+            max-height: 400px; /* Fixed height for scrollable tables */
+            overflow-y: auto;  /* Enable vertical scrolling */
+            display: block;    /* Ensure scroll works correctly */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr; /* Single column layout on smaller screens */
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Manager Dashboard</h1>
+</header>
+
+<div class="container">
+    <!-- Task Dashboard -->
+    <div class="grid-item">
+        <a th:href="@{/tasks}" class="dashboard-button">Task Dashboard</a>
+        <div class="scrollable">
+            <table>
+                <thead>
+                <tr>
+                    <th>Task ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Assigned Employee</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="task : ${tasks}">
+                    <td th:text="${task.taskId}"></td>
+                    <td th:text="${task.taskName}"></td>
+                    <td th:text="${task.taskDescription}"></td>
+                    <td th:text="${task.taskStatus}"></td>
+                    <td th:text="${task.assignedEmployee?.username}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Employee List -->
+    <div class="grid-item">
+        <a th:href="@{/employees}" class="dashboard-button">Employee List</a>
+        <div class="scrollable">
+            <table>
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Role</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="employee : ${employees}">
+                    <td th:text="${employee.username}"></td>
+                    <td th:text="${employee.firstName}"></td>
+                    <td th:text="${employee.lastName}"></td>
+                    <td th:text="${employee.role}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Event Dashboard -->
+    <div class="grid-item">
+        <a th:href="@{/events}" class="dashboard-button">Event Dashboard</a>
+        <div class="scrollable">
+            <table>
+                <thead>
+                <tr>
+                    <th>Event ID</th>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="event : ${events}">
+                    <td th:text="${event.eventID}"></td>
+                    <td th:text="${event.eventName}"></td>
+                    <td th:text="${event.eventDate}"></td>
+                    <td th:text="${event.eventStatus}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+

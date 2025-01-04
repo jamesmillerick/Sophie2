@@ -3,30 +3,35 @@ package com.fyp.SpringSophie2.Controller;
 
 import com.fyp.SpringSophie2.Service.EventService;
 import com.fyp.SpringSophie2.model.Event;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController
-@RequestMapping("/api/events")
+@Controller
+@RequestMapping("/events")
 public class EventController {
 
     private final EventService eventService;
 
     //Constructor-based dependency injection
+    @Autowired
     public EventController(EventService eventService) {
         this.eventService = eventService;
     }
 
-    //Get all events
+    //Get all events and render them with ThymeLeaf
     @GetMapping
-    public List<Event> getAllEvents() {
-        return eventService.getAllEvents();
+    public String getAllEvents(Model model) {
+        List<Event> events = eventService.getAllEvents();
+        model.addAttribute("events", events);
+        return "EventDashboard"; //Ensure this matches the file name of the ThymeLeaf template
     }
 
+    /*
     //Get an event by eventID
     @GetMapping("/{eventID}")
     public ResponseEntity<Event> getEventById(@PathVariable String eventID) {
@@ -34,33 +39,45 @@ public class EventController {
         return event.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    //Create a new event
+     */
+    // Create a new event
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
-        Event createdEvent = eventService.createEvent(event);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
+    public String createEvent(@ModelAttribute Event event) {
+        eventService.createEvent(event);
+        return "redirect:/events";  // Redirect to the list of events
+    }
+
+    @GetMapping("/create")
+    public String showCreateEventForm(Model model) {
+        model.addAttribute("event", new Event());  // Create a new empty event object for the form
+        return "createEvent";  // This should match the name of your Thymeleaf template
+    }
+
+    //Show the form for editing an event
+    @GetMapping("/{eventID}/edit")
+    public String showEditForm(@PathVariable String eventID, Model model) {
+        Optional<Event> event = eventService.getEventById(eventID);
+        if (event.isPresent()) {
+            model.addAttribute("event", event.get());
+            return "editEvent"; //Make sure this view exists for editing
+        }
+        return "redirect:/events";
+
     }
 
     //Update an existing event
-    @PutMapping("/{eventID}")
-    public ResponseEntity<Event> updateEvent(@PathVariable String eventID, @RequestBody Event updatedEvent) {
-        try {
-            Event event = eventService.updateEvent(eventID, updatedEvent);
-            return ResponseEntity.ok(event);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    @PostMapping("/{eventID}/edit")
+    public String updateEvent(@PathVariable String eventID, @ModelAttribute Event updatedEvent) {
+        eventService.updateEvent(eventID, updatedEvent);
+        return "redirect:/events"; //Redirect to the event list after update
     }
 
+
     //Delete an event by its ID
-    @DeleteMapping("/{eventID}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable String eventID) {
-        try {
-            eventService.deleteEvent(eventID);
-            return ResponseEntity.noContent().build(); //Return 204 No Content
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    @GetMapping("/{eventID}/delete")
+    public String deleteEvent(@PathVariable String eventID) {
+        eventService.deleteEvent(eventID);
+        return "redirect:/events"; //Redirect to the event list after delete
     }
 
 }

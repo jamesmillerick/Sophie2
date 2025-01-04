@@ -2,6 +2,7 @@ package com.fyp.SpringSophie2.Service;
 
 import com.fyp.SpringSophie2.Repository.TaskRepository;
 import com.fyp.SpringSophie2.model.Task;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
 
+    @Autowired
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
@@ -27,26 +29,26 @@ public class TaskService {
     }
 
     // Retrieve a Task by its ID
-    public Optional<Task> getTaskById(int taskId) {
+    public Optional<Task> getTaskById(Long taskId) {
         return taskRepository.findById(taskId);
     }
 
     //Update an existing Task
-    public Task updateTask(int taskId, Task updatedTask) {
+    public Task updateTask(Long taskId, Task updatedTask) {
         return taskRepository.findById(taskId)
                 .map(task -> {
+                    task.setTaskName(updatedTask.getTaskName());
                     task.setTaskDescription(updatedTask.getTaskDescription());
-                    task.setDueDate(updatedTask.getDueDate());
-                    task.setEventStatus(updatedTask.getEventStatus());
-                    task.setEventID(updatedTask.getEventID());
+                    task.setTaskStatus(updatedTask.getTaskStatus());
                     task.setAssignedEmployee(updatedTask.getAssignedEmployee());
+                    task.setEvent(updatedTask.getEvent());
                     return taskRepository.save(task);
                 })
                 .orElseThrow(() -> new RuntimeException("Task not found with ID: " + taskId));
     }
 
     // Delete a Task by its ID
-    public void deleteTask(int taskId) {
+    public void deleteTask(Long taskId) {
         if (taskRepository.existsById(taskId)) {
             taskRepository.deleteById(taskId);
         } else {

@@ -7,8 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TaskRepository extends JpaRepository<Task, Integer> {
-    List<Task> findByEventID(String eventID);
+public interface TaskRepository extends JpaRepository<Task, Long> {
 }
 /*
 Similar to that of the EmployeeRepository.java file that was suggested by ChatGPT, because repositories in Spring Data JPA

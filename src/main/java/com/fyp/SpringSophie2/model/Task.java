@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 /*
 Lombok was suggested by a colleague in my year due to its ability to help reduce boilerplate code and improve development of my project
  */
@@ -17,27 +15,31 @@ public class Task {
     // Getters and setters for all attributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int taskID;
+    private Long taskId;
+
+    private String taskName;
     private String taskDescription;
-    private LocalDate dueDate;
-    private String eventStatus;
-    private String eventID;
+    private String taskStatus;
 
     @ManyToOne // Many tasks can be assigned to one employee
-    @JoinColumn(name = "username", nullable = false) // username is the foreign key in the Task table
+    @JoinColumn(name = "assigned_employee_username") // username is the foreign key in the Task table
     private Employee assignedEmployee;//assignedEmployee is also a foreign key - to the employee table
 
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
 
-
-    public Task(int taskID, String taskDescription, LocalDate dueDate, String eventStatus, String eventID) {
-        this.taskID = taskID;
-        this.taskDescription = taskDescription;
-        this.dueDate = dueDate;
-        this.eventStatus = eventStatus;
-        this.eventID = eventID;
-    }
     public Task() {
 
     }
+
+    public Task(String taskName, String taskDescription, String taskStatus, Employee assignedEmployee, Event event) {
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.taskStatus = taskStatus;
+        this.assignedEmployee = assignedEmployee;
+        this.event = event;
+    }
+
 
 }

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Dashboard</title>
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+  <style>
+    .main-button {
+      display: inline-block;
+      background-color: #28a745; /* Green color */
+      color: white;
+      text-decoration: none;
+      font-size: 1em;
+      padding: 10px 20px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .main-button:hover {
+      background-color: #218838; /* Darker green on hover */
+    }
+  </style>
+
+</head>
+<body>
+<header>
+  <h1>Task Dashboard</h1>
+  <a href="/tasks/create" class="button">Create a New Task</a>
+  <a href="/manager/dashboard" class="main-button">Main</a> <!-- Green Main Button -->
+</header>
+
+<main>
+  <table id="taskTable">
+    <thead>
+    <tr>
+      <th>task Id</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Status</th>
+      <th>Assigned Employee</th>
+      <th>Event</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Rows will be dynamically added here -->
+    <tr th:each="task : ${tasks}">
+      <td th:text="${task.taskId}"></td>
+      <td th:text="${task.taskName}"></td>
+      <td th:text="${task.taskDescription}"></td>
+      <td th:text="${task.taskStatus}"></td>
+      <td th:text="${task.assignedEmployee?.username}"></td>
+      <td th:text="${task.event?.eventName}"></td>  <!-- Displays event name -->
+      <td>
+        <a th:href="@{/tasks/{taskId}/edit(taskId=${task.taskId})}">Edit</a> |
+        <a th:href="@{/tasks/{taskId}/delete(taskId=${task.taskId})}">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</main>
+
+</body>
+</html>

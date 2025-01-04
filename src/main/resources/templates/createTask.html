@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Task</title>
+</head>
+<body>
+
+<h1>Create New Task</h1>
+
+<form th:action="@{/tasks/create}" th:object="${task}" method="post">
+  <label for="taskName">Task Name:</label>
+  <input type="text" th:field="*{taskName}" required/><br/>
+
+  <label for="taskDescription">Task Description:</label>
+  <input type="text" th:field="*{taskDescription}" required/><br/>
+
+  <label for="taskStatus">Task Status:</label>
+  <input type="text" th:field="*{taskStatus}" required/><br/>
+
+  <label for="assignedEmployee">Assigned Employee:</label>
+  <select th:field="*{assignedEmployee}">
+    <option th:each="employee : ${employees}" th:value="${employee.username}" th:text="${employee.firstName} + ' ' + ${employee.lastName}"></option>
+  </select><br/>
+
+  <label for="event">Event:</label>
+  <select th:field="*{event}">
+    <option th:each="event : ${events}" th:value="${event.eventID}" th:text="${event.eventName}"></option>
+  </select><br/>
+
+  <button type="submit">Create Task</button>
+</form>
+</body>
+</html>
