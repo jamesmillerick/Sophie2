@@ -29,11 +29,13 @@ public class EmployeeService {
     }
 
     //Create a new employee
+    //Currently not being used
     public Employee createEmployee(Employee employee) {
         return employeeRepository.save(employee);
     }
 
     //Update an existing employee
+    //Currently not being used
     public Employee updateEmployee(String username, Employee updatedEmployee) {
         return employeeRepository.findById(username)
                 .map(employee -> {
@@ -53,5 +55,11 @@ public class EmployeeService {
         } else {
             throw new RuntimeException("Employee not found with username: " + username);
         }
+    }
+
+    //Check if employee exists and validate their password
+    public boolean validateCredentials(String username, String password) {
+        Optional<Employee> employeeOptional = getEmployeeByUsername(username);
+        return employeeOptional.map(employee -> employee.getPassword().equals(password)).orElse(false);
     }
 }

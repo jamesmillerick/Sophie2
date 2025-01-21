@@ -55,4 +55,9 @@ public class TaskService {
             throw new RuntimeException("Task not found with ID: " + taskId);
         }
     }
+
+    // Get all tasks assigned to the logged-in user
+    public List<Task> getTasksByAssignedEmployeeUsername(String username) {
+        return taskRepository.findByAssignedEmployeeUsername(username);
+    }
 }

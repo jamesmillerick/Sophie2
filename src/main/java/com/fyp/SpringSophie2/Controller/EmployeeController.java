@@ -23,6 +23,9 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
+    /*
+    (Model model) - ui.Model and "addAttribute" comes from https://github.com/sprashantofficial/CRUDWithPostgresAndJSPExample/blob/main/src/main/java/com/example/jspdemo/controller/AnimeController.java
+     */
     //Get all employees
     @GetMapping
     public String getAllEmployees(Model model) {
@@ -31,6 +34,7 @@ public class EmployeeController {
         return "employeeList"; //ThymeLeaf template name for displaying all employees
     }
 
+    //Code is kept in the event if I need it
     /*
     //Get an employee by username
     @GetMapping("/{username}")
@@ -38,7 +42,6 @@ public class EmployeeController {
         Optional<Employee> employee = employeeService.getEmployeeByUsername(username);
         return employee.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
-
      */
 
     //Show form to create a new employee
@@ -55,6 +58,9 @@ public class EmployeeController {
         return "redirect:/employees"; //Redirect to the employee list after creation
     }
 
+    /*
+    Code is adapted from ChatGPT - Prompt: "I have a way to display a form to create a new employee existing but how do I alter that code to show a form to edit an employee?"
+     */
     //Show form to edit an employee
     @GetMapping("/{username}/edit")
     public String showEditForm(@PathVariable String username, Model model) {

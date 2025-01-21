@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
     @GetMapping("/")
-    public String showEventDashboard() {
-        return "EventDashboard"; //redirects the opening page
+    public String home() {
+        return "login"; //redirects the opening page
     }
 }

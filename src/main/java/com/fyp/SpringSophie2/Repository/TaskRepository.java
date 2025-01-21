@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
+    List<Task> findByAssignedEmployeeUsername(String username);
 }
 /*
 Similar to that of the EmployeeRepository.java file that was suggested by ChatGPT, because repositories in Spring Data JPA

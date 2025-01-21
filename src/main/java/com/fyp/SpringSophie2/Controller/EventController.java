@@ -23,6 +23,10 @@ public class EventController {
         this.eventService = eventService;
     }
 
+    /*
+    (Model model) - ui.Model and "addAttribute" comes from https://github.com/sprashantofficial/CRUDWithPostgresAndJSPExample/blob/main/src/main/java/com/example/jspdemo/controller/AnimeController.java
+     */
+
     //Get all events and render them with ThymeLeaf
     @GetMapping
     public String getAllEvents(Model model) {
@@ -47,6 +51,7 @@ public class EventController {
         return "redirect:/events";  // Redirect to the list of events
     }
 
+    //Show the form for creating an event
     @GetMapping("/create")
     public String showCreateEventForm(Model model) {
         model.addAttribute("event", new Event());  // Create a new empty event object for the form
@@ -72,7 +77,9 @@ public class EventController {
         return "redirect:/events"; //Redirect to the event list after update
     }
 
-
+/*
+Adapted code for "delete by ID" from https://github.com/sprashantofficial/CRUDWithPostgresAndJSPExample/blob/main/src/main/java/com/example/jspdemo/controller/AnimeController.java
+ */
     //Delete an event by its ID
     @GetMapping("/{eventID}/delete")
     public String deleteEvent(@PathVariable String eventID) {

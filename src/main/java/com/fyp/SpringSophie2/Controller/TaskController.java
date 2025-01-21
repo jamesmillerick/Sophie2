@@ -95,5 +95,24 @@ public class TaskController {
         return "redirect:/tasks"; // Redirect to task dashboard after delete
     }
 
+    // Get all tasks assigned to the logged-in user
+    @GetMapping("/TaskAssigned")
+    public String showTasks(@RequestParam("username") String username, Model model) {
+        List<Task> tasks = taskService.getTasksByAssignedEmployeeUsername(username);
+        model.addAttribute("tasks", tasks);
+        return "TaskAssigned"; //Redirect to TaskAssigned.html and should display only the tasks assigned to the individual based on their username
+    }
+
+    // Update the status of each task
+    @PostMapping("/{taskId}/updateStatus")
+    public String updateTaskStatus(@PathVariable Long taskId, @RequestParam("status") String status) {
+        Optional<Task> task = taskService.getTaskById(taskId);
+        if (task.isPresent()) {
+            Task updatedTask = task.get();
+            updatedTask.setTaskStatus(status);
+            taskService.updateTask(taskId, updatedTask);
+        }
+        return "redirect:/tasks"; // Redirect back to the task list after updating status
+    }
 
 }

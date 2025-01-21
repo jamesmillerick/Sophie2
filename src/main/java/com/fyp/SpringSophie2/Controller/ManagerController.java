@@ -13,6 +13,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
+
+//This is the main dashboard for the event manager to view
+
+/*
+Code for this came from ChatGPT prompt - Query: I want to create a way for the event manager to be able to see all three dashboards on one page, acting as a master dashboard
+Code was edited to suit my application
+ */
+
 @Controller
 public class ManagerController {
 
@@ -27,7 +35,7 @@ public class ManagerController {
         this.eventService = eventService;
     }
 
-    @GetMapping("/manager/dashboard")
+    @GetMapping("/ManagerDashboard")
     public String showManagerDashboard(Model model) {
         // Fetch all tasks
         List<Task> tasks = taskService.getAllTasks();
