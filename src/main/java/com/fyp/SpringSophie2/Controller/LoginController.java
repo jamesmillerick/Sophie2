@@ -46,6 +46,10 @@ public class LoginController {
         return "login";  //Redirect back to the login page
     }
 
+    /*
+    Boolean function was adapted from https://www.geeksforgeeks.org/java-string-equalsignorecase-method-with-examples/
+    because I needed to have a way to return certain values but exploit others
+     */
     private boolean isManagerRole(String role) {
         return role.equalsIgnoreCase("event manager")
                 || role.equalsIgnoreCase("general manager")

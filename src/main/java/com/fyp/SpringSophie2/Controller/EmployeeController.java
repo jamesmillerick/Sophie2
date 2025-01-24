@@ -87,4 +87,25 @@ public class EmployeeController {
         return "redirect:/employees"; //Redirect to the employee list after deleting
     }
 
+    //Allows the event manager to search for an employee
+    @GetMapping("/search")
+    public String searchEmployees(@RequestParam("firstName") Optional<String> firstName,
+                                  @RequestParam("lastName") Optional<String> lastName,
+                                  Model model) {
+        List<Employee> employees;
+
+        if (firstName.isPresent() && lastName.isPresent()) {
+            employees = employeeService.searchEmployeesByFirstAndLastName(firstName.get(), lastName.get());
+        } else if (firstName.isPresent()) {
+            employees = employeeService.searchEmployeesByFirstName(firstName.get());
+        } else if (lastName.isPresent()) {
+            employees = employeeService.searchEmployeesByLastName(lastName.get());
+        } else {
+            employees = employeeService.getAllEmployees(); // Return all employees if no query provided
+        }
+
+        model.addAttribute("employees", employees);
+        return "employeeList"; // Returns the employee list
+    }
+
 }
