@@ -100,11 +100,20 @@ public class TaskController {
     public String showTasks(@RequestParam("username") String username, Model model) {
         List<Task> tasks = taskService.getTasksByAssignedEmployeeUsername(username);
         model.addAttribute("tasks", tasks);
+
+        if (tasks.isEmpty()) {
+            model.addAttribute("noTasks", true);
+        } else {
+            model.addAttribute("noTasks", false);
+            model.addAttribute("tasks", tasks);
+        }
         return "TaskAssigned"; //Redirect to TaskAssigned.html and should display only the tasks assigned to the individual based on their username
     }
 
+
+/*
     // Update the status of each task
-    @PostMapping("/{taskId}/updateStatus")
+    @PostMapping("/tasks/{taskId}/updateStatus")
     public String updateTaskStatus(@PathVariable Long taskId, @RequestParam("status") String status) {
         Optional<Task> task = taskService.getTaskById(taskId);
         if (task.isPresent()) {
@@ -115,4 +124,22 @@ public class TaskController {
         return "redirect:/tasks"; // Redirect back to the task list after updating status
     }
 
+ */
+
+    // Update Task Status (AJAX Request)
+    @PostMapping("/{taskId}/updateStatus")
+    @ResponseBody
+    public String updateTaskStatus(@PathVariable Long taskId, @RequestParam("status") String status) {
+        System.out.println("Updating Task ID: " + taskId + " with status: " + status);
+
+        Optional<Task> task = taskService.getTaskById(taskId);
+        if (task.isPresent()) {
+            Task updatedTask = task.get();
+            updatedTask.setTaskStatus(status);
+            taskService.updateTask(taskId, updatedTask);
+            return "Task status updated successfully.";
+        } else {
+            return "Task not found.";
+        }
+    }
 }

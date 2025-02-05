@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -24,11 +25,8 @@ public class Employee {
     private String password;
 
     // Define the One-to-Many relationship with Task
-    @OneToMany(mappedBy = "assignedEmployee", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> tasks;
-
-
-
+    @OneToMany(mappedBy = "assignedEmployee", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<Task> tasks = new ArrayList<>();  // Initialize as empty list to avoid null reference issues
 
 
     //Parameterised Constructors

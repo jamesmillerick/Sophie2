@@ -54,5 +54,25 @@ public class ManagerController {
         // Return the Thymeleaf view
         return "ManagerDashboard";
     }
+
+    @GetMapping("/index")
+    public String showIndexPage(Model model) {
+        // Fetch all events
+        List<Event> events = eventService.getAllEvents();
+
+        // Fetch all employees (optional)
+        List<Employee> employees = employeeService.getAllEmployees();
+
+        // Fetch all tasks (optional)
+        List<Task> tasks = taskService.getAllTasks();
+
+        // Add attributes to the model for Thymeleaf
+        model.addAttribute("events", events);
+        model.addAttribute("employees", employees);
+        model.addAttribute("tasks", tasks);
+
+        // Return the Thymeleaf view
+        return "index"; // Points to the index.html file in Thymeleaf templates folder
+    }
 }
 

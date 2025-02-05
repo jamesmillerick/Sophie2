@@ -3,13 +3,14 @@ package com.fyp.SpringSophie2.Controller;
 
 import com.fyp.SpringSophie2.Service.EventService;
 import com.fyp.SpringSophie2.model.Event;
+import com.fyp.SpringSophie2.model.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.Month;
+import java.util.*;
 
 @Controller
 @RequestMapping("/events")
@@ -45,7 +46,7 @@ public class EventController {
 
      */
     // Create a new event
-    @PostMapping
+    @PostMapping("/create")
     public String createEvent(@ModelAttribute Event event) {
         eventService.createEvent(event);
         return "redirect:/events";  // Redirect to the list of events
@@ -58,6 +59,8 @@ public class EventController {
         return "createEvent";  // This should match the name of your Thymeleaf template
     }
 
+
+
     //Show the form for editing an event
     @GetMapping("/{eventID}/edit")
     public String showEditForm(@PathVariable String eventID, Model model) {
@@ -69,13 +72,15 @@ public class EventController {
         return "redirect:/events";
 
     }
-
+/*
     //Update an existing event
     @PostMapping("/{eventID}/edit")
     public String updateEvent(@PathVariable String eventID, @ModelAttribute Event updatedEvent) {
         eventService.updateEvent(eventID, updatedEvent);
         return "redirect:/events"; //Redirect to the event list after update
     }
+
+ */
 
 /*
 Adapted code for "delete by ID" from https://github.com/sprashantofficial/CRUDWithPostgresAndJSPExample/blob/main/src/main/java/com/example/jspdemo/controller/AnimeController.java
@@ -85,6 +90,42 @@ Adapted code for "delete by ID" from https://github.com/sprashantofficial/CRUDWi
     public String deleteEvent(@PathVariable String eventID) {
         eventService.deleteEvent(eventID);
         return "redirect:/events"; //Redirect to the event list after delete
+    }
+
+    @GetMapping("/events-per-month")
+    @ResponseBody
+    public Map<String, Integer> getEventsPerMonth() {
+        List<Event> events = eventService.getAllEvents(); // Assuming you have a method to get all events
+        Map<String, Integer> eventsPerMonth = new TreeMap<>(); // Sorted by month order
+
+        // Initialize all months with 0 events
+        for (int i = 1; i <= 12; i++) {
+            Month month = Month.of(i);
+            eventsPerMonth.put(month.name(), 0);
+        }
+
+        // Count events per month
+        for (Event event : events) {
+            String monthName = event.getEventDate().getMonth().name(); // Get the month name
+            eventsPerMonth.put(monthName, eventsPerMonth.getOrDefault(monthName, 0) + 1);
+        }
+
+        return eventsPerMonth; // Return JSON data like {"JANUARY": 5, "FEBRUARY": 3, ...}
+    }
+
+    @PostMapping("/events/update/{eventID}")
+    @ResponseBody
+    public Map<String, Object> updateEvent(@PathVariable String eventID, @RequestBody Event event) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            eventService.updateEvent(eventID, event);
+            response.put("success", true);
+        } catch (Exception e) {
+            response.put("success", false);
+        }
+
+        return response;
     }
 
 }

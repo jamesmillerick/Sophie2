@@ -34,18 +34,16 @@ public class TaskService {
     }
 
     //Update an existing Task
-    public Task updateTask(Long taskId, Task updatedTask) {
-        return taskRepository.findById(taskId)
-                .map(task -> {
-                    task.setTaskName(updatedTask.getTaskName());
-                    task.setTaskDescription(updatedTask.getTaskDescription());
-                    task.setTaskStatus(updatedTask.getTaskStatus());
-                    task.setAssignedEmployee(updatedTask.getAssignedEmployee());
-                    task.setEvent(updatedTask.getEvent());
-                    return taskRepository.save(task);
-                })
-                .orElseThrow(() -> new RuntimeException("Task not found with ID: " + taskId));
+    public void updateTask(Long taskId, Task updatedTask) {
+        Optional<Task> existingTask = taskRepository.findById(taskId);
+        if (existingTask.isPresent()) {
+            Task task = existingTask.get();
+            task.setTaskStatus(updatedTask.getTaskStatus());
+            taskRepository.save(task);
+        }
     }
+
+
 
     // Delete a Task by its ID
     public void deleteTask(Long taskId) {
@@ -61,3 +59,16 @@ public class TaskService {
         return taskRepository.findByAssignedEmployeeUsername(username);
     }
 }
+
+/*
+    //Update task Status
+    public void updateTaskStatus(Long taskId, String taskStatus) {
+        Optional<Task> taskOptional = taskRepository.findById(taskId);
+        if (taskOptional.isPresent()) {
+            Task task = taskOptional.get();
+            task.setTaskStatus(taskStatus); // Update the task
+            taskRepository.save(task); // Save updated task status to the database
+        }
+    }
+
+     */

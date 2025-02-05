@@ -5,6 +5,7 @@ import com.fyp.SpringSophie2.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,6 +21,12 @@ public class LoginController {
         this.employeeService = employeeService;
     }
 
+    // Handle GET requests to display the login page
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "login";  // Return the login page view (login.html)
+    }
+
     @PostMapping("/login")
     public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
@@ -33,7 +40,7 @@ public class LoginController {
             if (employee.getPassword().equals(password)) {
                 //Redirect based on role
                 if (isManagerRole(employee.getRole())) {
-                    return "redirect:/ManagerDashboard"; //Redirects to the Manager Dashboard
+                    return "redirect:/index"; //Redirects to the Manager Dashboard
                 } else {
                     //Pass username as a query parameter to TaskAssigned
                     return "redirect:/tasks/TaskAssigned?username=" + username; //Redirects to the Assigned Task page

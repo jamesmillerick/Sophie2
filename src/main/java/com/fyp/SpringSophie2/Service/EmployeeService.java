@@ -63,18 +63,14 @@ public class EmployeeService {
         return employeeOptional.map(employee -> employee.getPassword().equals(password)).orElse(false);
     }
 
-    //Search for employees in the Employee list by first name
-    public List<Employee> searchEmployeesByFirstName(String firstName) {
-        return employeeRepository.findByFirstNameContainingIgnoreCase(firstName);
+    // Find employee by username
+    public Employee findByUsername(String username) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(username);
+        return optionalEmployee.orElse(null);
     }
 
-    //Search for employees in the Employee list by last name
-    public List<Employee> searchEmployeesByLastName(String lastName) {
-        return employeeRepository.findByLastNameContainingIgnoreCase(lastName);
-    }
-
-    //Search for employees in the Employee list by first name and last name
-    public List<Employee> searchEmployeesByFirstAndLastName(String firstName, String lastName) {
-        return employeeRepository.findByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(firstName, lastName);
+    // Save updated employee details
+    public void save(Employee employee) {
+        employeeRepository.save(employee);
     }
 }

@@ -33,7 +33,7 @@ public class EventService {
     public Event createEvent(Event event) {
         return eventRepository.save(event);
     }
-
+/*
     //Update an existing event
     public Event updateEvent(String eventID, Event updatedEvent) {
         return eventRepository.findById(eventID)
@@ -44,6 +44,20 @@ public class EventService {
                     return eventRepository.save(event);
                 })
                 .orElseThrow(() -> new RuntimeException("Event not found with ID: " + eventID));
+    }
+
+ */
+
+    //Update an event using AJAX
+    public void updateEvent(String eventID, Event updatedEvent) {
+        Event existingEvent = eventRepository.findById(eventID)
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        existingEvent.setEventName(updatedEvent.getEventName());
+        existingEvent.setEventDate(updatedEvent.getEventDate());
+        existingEvent.setEventStatus(updatedEvent.getEventStatus());
+
+        eventRepository.save(existingEvent);
     }
 
     //Delete an event by its ID
