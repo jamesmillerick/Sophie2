@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+<!-- =========================================================
+* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -128,7 +140,7 @@
                     </a>
                     <ul class="menu-sub">
                         <li class="menu-item">
-                            <a href="accountSettings.html" class="menu-link">
+                            <a href="/accountSettings" class="menu-link">
                                 <div data-i18n="Account">Account</div>
                             </a>
                         </li>
@@ -332,15 +344,9 @@
                                     <td th:text="${employee.role}"></td>
                                     <td>
                                         <!-- Edit Button (Blue) -->
-                                        <button class="btn btn-primary editEmployeeBtn"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#editEmployeeModal"
-                                                data-username="${employee.username}"
-                                                data-firstname="${employee.firstName}"
-                                                data-lastname="${employee.lastName}"
-                                                data-role="${employee.role}">
+                                        <a class="btn btn-primary" th:href="@{'/employees/' + ${employee.username} + '/edit'}">
                                             <i class="bx bx-edit-alt me-1"></i> Edit
-                                        </button>
+                                        </a>
 
                                         <!-- Delete Button (Red) -->
                                         <a class="btn btn-danger" th:href="@{'/employees/' + ${employee.username} + '/delete'}"
@@ -353,57 +359,9 @@
                             </table>
                         </div>
                     </div>
-                    <script>
-                        document.addEventListener("DOMContentLoaded", function () {
-                            // Add event listeners to all "Edit" buttons
-                            document.querySelectorAll(".edit-btn").forEach(button => {
-                                button.addEventListener("click", function () {
-                                    let username = this.getAttribute("data-username");
-
-                                    // Fetch employee details
-                                    fetch(`/employees/${username}`)
-                                        .then(response => response.json())
-                                        .then(employee => {
-                                            document.getElementById("editUsername").value = username;
-                                            document.getElementById("editFirstName").value = employee.firstName;
-                                            document.getElementById("editLastName").value = employee.lastName;
-                                            document.getElementById("editRole").value = employee.role;
-
-                                            // Show the modal
-                                            new bootstrap.Modal(document.getElementById("editEmployeeModal")).show();
-                                        })
-                                        .catch(error => console.error("Error fetching employee data:", error));
-                                });
-                            });
-
-                            // Update employee when "Update Changes" button is clicked
-                            document.getElementById("updateEmployeeBtn").addEventListener("click", function () {
-                                let username = document.getElementById("editUsername").value;
-                                let updatedEmployee = {
-                                    firstName: document.getElementById("editFirstName").value,
-                                    lastName: document.getElementById("editLastName").value,
-                                    role: document.getElementById("editRole").value
-                                };
-
-                                fetch(`/employees/${username}/update`, {
-                                    method: "PUT",
-                                    headers: {
-                                        "Content-Type": "application/json"
-                                    },
-                                    body: JSON.stringify(updatedEmployee)
-                                })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        alert("Employee updated successfully!");
-
-                                        // Reload page to reflect changes
-                                        location.reload();
-                                    })
-                                    .catch(error => console.error("Error updating employee:", error));
-                            });
-                        });
-                    </script>
                     <!-- Script to operate the search bar -->
+                    <!-- Search bar code is adapted from YouTube video - "Build a Search Bar & Filter Table using JS" by AB Nation Programmers
+           https://www.youtube.com/watch?v=DUF2R348D8A&t=168s -->
                     <script>
                         function searchTable() {
                             let input = document.getElementById("employeeSearch").value.toLowerCase();
@@ -484,41 +442,6 @@
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
-
-<!-- Edit Employee Modal -->
-<div class="modal fade" id="editEmployeeModal" tabindex="-1" aria-labelledby="editEmployeeLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editEmployeeLabel">Edit Employee</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="editEmployeeForm">
-                    <input type="hidden" id="editUsername">
-
-                    <div class="mb-3">
-                        <label for="editFirstName" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="editFirstName">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editLastName" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="editLastName">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="editRole" class="form-label">Role</label>
-                        <input type="text" class="form-control" id="editRole">
-                    </div>
-
-                    <button type="button" class="btn btn-primary" id="updateEmployeeBtn">Update Changes</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Edit Employee Modal -->
 
 </body>
 </html>

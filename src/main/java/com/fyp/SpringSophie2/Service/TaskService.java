@@ -38,7 +38,11 @@ public class TaskService {
         Optional<Task> existingTask = taskRepository.findById(taskId);
         if (existingTask.isPresent()) {
             Task task = existingTask.get();
+            task.setTaskName(updatedTask.getTaskName());
+            task.setTaskDescription(updatedTask.getTaskDescription());
             task.setTaskStatus(updatedTask.getTaskStatus());
+            task.setAssignedEmployee(updatedTask.getAssignedEmployee());
+            task.setEvent(updatedTask.getEvent());
             taskRepository.save(task);
         }
     }
