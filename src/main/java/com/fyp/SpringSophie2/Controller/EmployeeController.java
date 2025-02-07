@@ -3,6 +3,7 @@ package com.fyp.SpringSophie2.Controller;
 
 import com.fyp.SpringSophie2.Service.EmployeeService;
 import com.fyp.SpringSophie2.model.Employee;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +63,7 @@ public class EmployeeController {
 
     /*
     Code is adapted from ChatGPT - Prompt: "I have a way to display a form to create a new employee existing but how do I alter that code to show a form to edit an employee?"
-     *
+     */
     //Show form to edit an employee
     @GetMapping("/{username}/edit")
     public String showEditForm(@PathVariable String username, Model model) {
@@ -81,7 +82,7 @@ public class EmployeeController {
         return "redirect:/employees"; //Redirect to the employee list after updating
     }
 
-     */
+
 
     @GetMapping("/{username}")
     public ResponseEntity<Employee> getEmployeeByUsername(@PathVariable String username) {
@@ -92,31 +93,30 @@ public class EmployeeController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/{username}/update")
-    @ResponseBody
-    public ResponseEntity<?> updateEmployee(@PathVariable String username, @RequestBody Employee updatedEmployee) {
-        Employee existingEmployee = employeeService.findByUsername(username);
-        if (existingEmployee == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Employee not found");
-        }
-
-        // Update fields
-        existingEmployee.setFirstName(updatedEmployee.getFirstName());
-        existingEmployee.setLastName(updatedEmployee.getLastName());
-        existingEmployee.setRole(updatedEmployee.getRole());
-
-        // Save to DB
-        employeeService.save(existingEmployee);
-
-        return ResponseEntity.ok(existingEmployee);
-    }
-
 
     //Delete an employee by username
     @GetMapping("/{username}/delete")
     public String deleteEmployee(@PathVariable String username) {
         employeeService.deleteEmployee(username);
         return "redirect:/employees"; //Redirect to the employee list after deleting
+    }
+
+    @GetMapping("/employees/current")
+    @ResponseBody
+    public ResponseEntity<Employee> getCurrentEmployee(HttpSession session) {
+        String username = (String) session.getAttribute("loggedInUser");
+
+        if (username == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        Employee employee = employeeService.findByUsername(username);
+
+        if (employee == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        return ResponseEntity.ok(employee);
     }
 
     /*

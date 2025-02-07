@@ -14,6 +14,9 @@
 <!-- beautify ignore:start -->
 <html lang="en" class="light-style customizer-hide" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
 <head>
+    <base href="/"> <!-- <base> tag came from ChatGPT because my edit pages were prefixing /events/ and it should not do that when rendering the CSS,
+    therefore this makes all relative links start from /, preventing the /events/ prefix issue.
+    This tag is also used in editTask template and editEmployee template-->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
     <title>Create Events - Knot</title>
@@ -119,7 +122,7 @@
                     <h4 class="mb-2">Edit Event ✏️</h4>
                     <p class="mb-4">Modify the event details below</p>
 
-                    <form id="formEditEvent" class="mb-3" method="POST" th:action="@{/events/edit/{eventID}(eventID=${event.eventID})}" th:object="${event}">
+                    <form id="formEditEvent" class="mb-3" method="POST" th:action="@{/events/{eventID}/edit(eventID=${event.eventID})}" th:object="${event}">
 
                         <!-- Event Name -->
                         <div class="mb-3">

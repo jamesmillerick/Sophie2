@@ -6,12 +6,13 @@ import com.fyp.SpringSophie2.model.Task;
 import com.fyp.SpringSophie2.Service.EmployeeService;
 import com.fyp.SpringSophie2.Service.EventService;
 import com.fyp.SpringSophie2.Service.TaskService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
+import java.util.*;
 
 
 //This is the main dashboard for the event manager to view
@@ -35,7 +36,66 @@ public class ManagerController {
         this.eventService = eventService;
     }
 
-    @GetMapping("/ManagerDashboard")
+    @GetMapping("/index")
+    public String showIndexPage(Model model) {
+        // Fetch only upcoming and ongoing events
+        List<Event> upcomingEvents = eventService.getUpcomingEventsForNextWeek();
+
+        // Create a map to store tasks per event
+        Map<String, List<Task>> eventTasks = new HashMap<>();
+
+
+        for (Event event : upcomingEvents) {
+            List<Task> incompleteTasks = taskService.getIncompleteTasksByEvent(event.getEventID());
+
+            // Sort tasks: "Not Started" first, then "Started"
+            incompleteTasks.sort(Comparator.comparing(task -> {
+                if ("Not Started".equals(task.getTaskStatus())) return 0;
+                if ("Started".equals(task.getTaskStatus())) return 1;
+                return 2; // Just in case other statuses exist
+            }));
+
+            eventTasks.put(event.getEventID(), incompleteTasks);
+        }
+
+        // Fetch all employees (optional, if needed elsewhere)
+        List<Employee> employees = employeeService.getAllEmployees();
+
+        // Count all tasks by roles for events
+        Map<String, Long> roleTaskCounts = taskService.getTaskCountByRole();
+
+        // Get event counts by month for 2025
+        List<Map<String, Object>> eventCountsByMonth = eventService.getEventCountsByMonth();
+
+        System.out.println("Event counts by month: " + eventCountsByMonth);
+
+        // Add attributes to the model for Thymeleaf
+        model.addAttribute("events", upcomingEvents);
+        model.addAttribute("employees", employees);
+        model.addAttribute("eventTasks", eventTasks);
+        model.addAttribute("roleTaskCounts", roleTaskCounts);
+        model.addAttribute("eventCountsByMonth", eventCountsByMonth);
+
+        // Return the Thymeleaf view
+        return "index"; // Points to the index.html file in Thymeleaf templates folder
+        }
+
+    // Display account settings page with user details
+    @GetMapping("/accountSettings")
+    public String accountSettings(HttpSession session, Model model) {
+        Employee employee = (Employee) session.getAttribute("loggedInEmployee");
+
+        if (employee == null) {
+            return "redirect:/login"; // Redirect to login if not authenticated
+        }
+
+        model.addAttribute("employee", employee);
+        return "accountSettings"; // Renders accountSettings.html
+    }
+}
+
+/*
+@GetMapping("/ManagerDashboard")
     public String showManagerDashboard(Model model) {
         // Fetch all tasks
         List<Task> tasks = taskService.getAllTasks();
@@ -54,25 +114,5 @@ public class ManagerController {
         // Return the Thymeleaf view
         return "ManagerDashboard";
     }
-
-    @GetMapping("/index")
-    public String showIndexPage(Model model) {
-        // Fetch all events
-        List<Event> events = eventService.getAllEvents();
-
-        // Fetch all employees (optional)
-        List<Employee> employees = employeeService.getAllEmployees();
-
-        // Fetch all tasks (optional)
-        List<Task> tasks = taskService.getAllTasks();
-
-        // Add attributes to the model for Thymeleaf
-        model.addAttribute("events", events);
-        model.addAttribute("employees", employees);
-        model.addAttribute("tasks", tasks);
-
-        // Return the Thymeleaf view
-        return "index"; // Points to the index.html file in Thymeleaf templates folder
-    }
-}
+ */
 

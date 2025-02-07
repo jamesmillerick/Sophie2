@@ -2,12 +2,16 @@ package com.fyp.SpringSophie2.Service;
 
 
 import com.fyp.SpringSophie2.Repository.EventRepository;
+import com.fyp.SpringSophie2.Repository.TaskRepository;
 import com.fyp.SpringSophie2.model.Event;
+import com.fyp.SpringSophie2.model.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -33,20 +37,6 @@ public class EventService {
     public Event createEvent(Event event) {
         return eventRepository.save(event);
     }
-/*
-    //Update an existing event
-    public Event updateEvent(String eventID, Event updatedEvent) {
-        return eventRepository.findById(eventID)
-                .map(event -> {
-                    event.setEventName(updatedEvent.getEventName());
-                    event.setEventDate(updatedEvent.getEventDate());
-                    event.setEventStatus(updatedEvent.getEventStatus());
-                    return eventRepository.save(event);
-                })
-                .orElseThrow(() -> new RuntimeException("Event not found with ID: " + eventID));
-    }
-
- */
 
     //Update an event using AJAX
     public void updateEvent(String eventID, Event updatedEvent) {
@@ -69,10 +59,57 @@ public class EventService {
         }
     }
 
+    public List<Event> getUpcomingEventsForNextWeek() {
+        LocalDate today = LocalDate.now(); // Get today's date
+        LocalDate nextWeek = today.plusDays(7); // Get the date one week from today
+        return eventRepository.findByEventDateBetween(today, nextWeek);
+    }
 
+    // Fetch all events and count them per month (No repository query needed)
+    public List<Map<String, Object>> getEventCountsByMonth() {
+        List<Event> events = eventRepository.findAll(); // Fetch all events
+
+        // Create a map to store the count of events for each month (Jan to Dec)
+        Map<Integer, Long> eventCountMap = Arrays.stream(Month.values())
+                .collect(Collectors.toMap(
+                        Month::getValue,  // Get month as an integer (1 = Jan, 2 = Feb, etc.)
+                        month -> 0L       // Initialize with 0 events
+                ));
+
+        // Process events and count them per month
+        for (Event event : events) {
+            int month = event.getEventDate().getMonthValue(); // Extract month number (1-12)
+            eventCountMap.put(month, eventCountMap.getOrDefault(month, 0L) + 1);
+        }
+
+        // Convert map to a List of Maps for easy Thymeleaf/JavaScript consumption
+        List<Map<String, Object>> eventCounts = new ArrayList<>();
+        for (Map.Entry<Integer, Long> entry : eventCountMap.entrySet()) {
+            Map<String, Object> monthData = new HashMap<>();
+            monthData.put("month", entry.getKey());
+            monthData.put("eventCount", entry.getValue());
+            eventCounts.add(monthData);
+        }
+
+        return eventCounts;
+    }
 }
 
 
+/*
+ //Get all events by month
+    public List<Map<String, Object>> getEventCountsByMonth() {
+        List<Object[]> results = eventRepository.getEventCountsPerMonth();
+        List<Map<String, Object>> eventCounts = new ArrayList<>();
+        for (Object[] result : results) {
+            Map<String, Object> monthData = new HashMap<>();
+            monthData.put("month", result[0]);
+            monthData.put("eventCount", result[1]);
+            eventCounts.add(monthData);
+        }
+        return eventCounts;
+    }
+ */
 
 
 
@@ -94,8 +131,20 @@ public class EventService {
 
 
 
+/*
+    //Update an existing event
+    public Event updateEvent(String eventID, Event updatedEvent) {
+        return eventRepository.findById(eventID)
+                .map(event -> {
+                    event.setEventName(updatedEvent.getEventName());
+                    event.setEventDate(updatedEvent.getEventDate());
+                    event.setEventStatus(updatedEvent.getEventStatus());
+                    return eventRepository.save(event);
+                })
+                .orElseThrow(() -> new RuntimeException("Event not found with ID: " + eventID));
+    }
 
-
+ */
 
 
 

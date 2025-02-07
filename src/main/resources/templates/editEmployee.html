@@ -14,6 +14,9 @@
 <!-- beautify ignore:start -->
 <html lang="en" class="light-style customizer-hide" dir="ltr" data-theme="theme-default" data-assets-path="../assets/" data-template="vertical-menu-template-free">
 <head>
+    <base href="/"> <!-- <base> tag came from ChatGPT because my edit pages were prefixing /employees/ and it should not do that when rendering the CSS,
+    therefore this makes all relative links start from /, preventing the /employees/ prefix issue.
+    This tag is also used in editEvent template and editTask template-->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
     <title>Edit Employee - Knot</title>
@@ -39,6 +42,7 @@
     <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
     <!-- Page CSS -->
+
     <!-- Page -->
     <link rel="stylesheet" href="../assets/vendor/css/pages/page-auth.css" />
     <!-- Helpers -->
@@ -122,11 +126,6 @@
                         <div class="mb-3">
                             <label for="lastName" class="form-label">Last Name</label>
                             <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name" th:field="${employee.lastName}" required/>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" th:field="${employee.username}" required autofocus/>
                         </div>
 
                         <div class="mb-3 form-password-toggle">

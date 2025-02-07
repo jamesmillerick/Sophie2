@@ -5,7 +5,9 @@ import com.fyp.SpringSophie2.model.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -38,7 +40,11 @@ public class TaskService {
         Optional<Task> existingTask = taskRepository.findById(taskId);
         if (existingTask.isPresent()) {
             Task task = existingTask.get();
+            task.setTaskName(updatedTask.getTaskName());
+            task.setTaskDescription(updatedTask.getTaskDescription());
             task.setTaskStatus(updatedTask.getTaskStatus());
+            task.setAssignedEmployee(updatedTask.getAssignedEmployee());
+            task.setEvent(updatedTask.getEvent());
             taskRepository.save(task);
         }
     }
@@ -57,6 +63,24 @@ public class TaskService {
     // Get all tasks assigned to the logged-in user
     public List<Task> getTasksByAssignedEmployeeUsername(String username) {
         return taskRepository.findByAssignedEmployeeUsername(username);
+    }
+
+    // Gets all the not completed tasks for a particular event
+    public List<Task> getIncompleteTasksByEvent(String eventID) {
+        return taskRepository.findByEventEventIDAndTaskStatusNot(eventID, "Completed");
+    }
+
+    // Counts the number of tasks by a role
+    public Map<String, Long> getTaskCountByRole() {
+        List<Object[]> results = taskRepository.countTasksByRole();
+        Map<String, Long> roleTaskCounts = new HashMap<>();
+
+        for (Object[] result : results) {
+            String role = (String) result[0]; // Role name
+            Long count = (Long) result[1]; // Number of tasks
+            roleTaskCounts.put(role, count);
+        }
+        return roleTaskCounts;
     }
 }
 
