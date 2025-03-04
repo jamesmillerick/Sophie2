@@ -330,88 +330,316 @@
 
         <div class="container-xxl flex-grow-1 container-p-y">
           <div class="row">
-            <!-- Incomplete Tasks Table -->
+              <!-- Upcoming Event Table -->
+              <div class="col-12 col-lg-12 mb-4">
+                <div class="card">
+                  <div class="card-header d-flex align-items-center justify-content-between">
+                    <ul class="nav nav-pills" role="tablist">
+                      <li class="nav-item">
+                        <button type="button" class="nav-link active" role="tab">
+                          Incomplete Tasks for Upcoming Event
+                        </button>
+                      </li>
+                    </ul>
+                    <div id="taskStatusChart" style="width: 150px; height: 150px; cursor: pointer;"></div>
+                  </div>
+                  <div class="card-body">
+                    <!-- Display the next event name -->
+                    <h6 class="mb-3">Next event is: <span th:text="${events[0].eventName}"></span></h6>
+
+                    <!-- Complete Event Button -->
+                    <button id="completeEventBtn" class="btn btn-sm btn-success mb-3" data-bs-toggle="modal" data-bs-target="#confirmCompleteModal">
+                      Complete Event
+                    </button>
+
+                    <!-- Expand/Collapse All Button -->
+                    <button id="toggleAllBtn" class="btn btn-sm btn-primary mb-3">Expand All</button>
+
+                    <!-- Task Lists (Hidden by default) -->
+                    <div id="taskLists">
+                      <!-- Not Started -->
+                      <div class="task-section">
+                        <h6 style="cursor: pointer;" onclick="toggleTaskList('notStartedTable')">🔴 Not Started</h6>
+                        <div id="notStartedTable" class="table-responsive" style="display: none;">
+                          <table class="table table-hover">
+                            <thead>
+                            <tr>
+                              <th>Task Name</th>
+                              <th>Assigned Employee</th>
+                              <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="task : ${eventTasks[events[0].eventID].?[taskStatus == 'Not Started']}">
+                              <td th:text="${task.taskName}"></td>
+                              <td th:text="${task.assignedEmployee?.username != null ? task.assignedEmployee?.username : 'Unassigned'}"></td>
+                              <td>
+                                <span class="badge bg-label-danger"><span th:text="${task.taskStatus}"></span></span>
+                              </td>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      <!-- Started -->
+                      <div class="task-section">
+                        <h6 style="cursor: pointer;" onclick="toggleTaskList('startedTable')">🟡 Started</h6>
+                        <div id="startedTable" class="table-responsive" style="display: none;">
+                          <table class="table table-hover">
+                            <thead>
+                            <tr>
+                              <th>Task Name</th>
+                              <th>Assigned Employee</th>
+                              <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="task : ${eventTasks[events[0].eventID].?[taskStatus == 'Started']}">
+                              <td th:text="${task.taskName}"></td>
+                              <td th:text="${task.assignedEmployee?.username != null ? task.assignedEmployee?.username : 'Unassigned'}"></td>
+                              <td>
+                                <span class="badge bg-label-warning"><span th:text="${task.taskStatus}"></span></span>
+                              </td>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      <!-- Completed -->
+                      <div class="task-section">
+                        <h6 style="cursor: pointer;" onclick="toggleTaskList('completedTable')">🟢 Completed</h6>
+                        <div id="completedTable" class="table-responsive" style="display: none;">
+                          <table class="table table-hover">
+                            <thead>
+                            <tr>
+                              <th>Task Name</th>
+                              <th>Assigned Employee</th>
+                              <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="task : ${eventTasks[events[0].eventID].?[taskStatus == 'Completed']}">
+                              <td th:text="${task.taskName}"></td>
+                              <td th:text="${task.assignedEmployee?.username != null ? task.assignedEmployee?.username : 'Unassigned'}"></td>
+                              <td>
+                                <span class="badge bg-label-success"><span th:text="${task.taskStatus}"></span></span>
+                              </td>
+                            </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+              <!-- /Upcoming Event Table -->
+
+              <!-- Confirmation Modal -->
+              <div class="modal fade" id="confirmCompleteModal" tabindex="-1" aria-labelledby="confirmCompleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="confirmCompleteModalLabel">Confirm Completion</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      Are you sure you want to mark this event as completed?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                      <button type="button" class="btn btn-success" id="confirmCompleteEvent">Yes</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <!-- Hidden Inputs to Store Task Status Counts -->
+              <input type="hidden" id="notStartedCount" th:value="${#lists.size(eventTasks[events[0].eventID].?[taskStatus == 'Not Started'])}">
+              <input type="hidden" id="startedCount" th:value="${#lists.size(eventTasks[events[0].eventID].?[taskStatus == 'Started'])}">
+              <input type="hidden" id="completedCount" th:value="${#lists.size(eventTasks[events[0].eventID].?[taskStatus == 'Completed'])}">
+
+
+              <!-- JS Function creates pie chart-->
+              <!-- Code comes from ChatGPT prompt: Is it possible to have a small hoverable pie chart next to the headings of
+              the table that shows how many of the tasks are "Not Started" and how many are "Started",
+               the pie chart can have the same colours as the statuses to reduce confusion.  -->
+              <!-- Updated Prompt:when the page loads, it should show the name of the next event like it already does, and then just the pie chart next to it,
+               but can you make the pie chart clickable, so that if I click on the "completed" section of the pie chart, it will expand a list of all the completed tasks,
+                and if I click it again, the list will collapse. Also can the same be done for the Started and Not Started portions of the pie chart as well please.
+                I would also like a small button that would say "Expand All" and when the list of all tasks is expanded,
+                 the button will change to "Collapse All" and then the list can be collapsed when clicked.-->
+
+              <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                  let notStartedCount = parseInt(document.getElementById("notStartedCount").value) || 0;
+                  let startedCount = parseInt(document.getElementById("startedCount").value) || 0;
+                  let completedCount = parseInt(document.getElementById("completedCount").value) || 0;
+
+                  var options = {
+                    series: [notStartedCount, startedCount, completedCount],
+                    chart: {
+                      type: "pie",
+                      width: 150,
+                      height: 150,
+                      animations: { enabled: false },
+                      tooltip: { enabled: true },
+                      events: {
+                        dataPointSelection: function(event, chartContext, config) {
+                          let selectedIndex = config.dataPointIndex;
+                          if (selectedIndex === 0) toggleTaskList("notStartedTable"); // Not Started
+                          if (selectedIndex === 1) toggleTaskList("startedTable"); // Started
+                          if (selectedIndex === 2) toggleTaskList("completedTable"); // Completed
+                        }
+                      }
+                    },
+                    labels: ["Not Started", "Started", "Completed"],
+                    colors: ["#d9534f", "#f0ad4e", "#5cb85c"], // Red, Yellow, Green
+                    legend: { show: false },
+                    dataLabels: { enabled: false }
+                  };
+
+                  var chart = new ApexCharts(document.querySelector("#taskStatusChart"), options);
+                  chart.render();
+
+                  // Expand/Collapse All Button
+                  document.getElementById("toggleAllBtn").addEventListener("click", function() {
+                    toggleAll();
+                  });
+                });
+
+                // Function to toggle visibility of individual task lists
+                function toggleTaskList(listId) {
+                  let element = document.getElementById(listId);
+                  element.style.display = (element.style.display === "none") ? "block" : "none";
+                }
+
+                // Function to expand/collapse all sections
+                function toggleAll() {
+                  let allLists = ["notStartedTable", "startedTable", "completedTable"];
+                  let expandAll = document.getElementById("toggleAllBtn").innerText === "Expand All";
+
+                  allLists.forEach(id => {
+                    document.getElementById(id).style.display = expandAll ? "block" : "none";
+                  });
+
+                  document.getElementById("toggleAllBtn").innerText = expandAll ? "Collapse All" : "Expand All";
+                }
+
+                document.addEventListener("DOMContentLoaded", function () {
+                  document.getElementById("confirmCompleteEvent").addEventListener("click", function () {
+                    let eventID = document.querySelector("[th:text='${events[0].eventID}']").textContent; // Get the event ID
+
+                    fetch(`index/${eventID}/eventStatus`, {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json"
+                      }
+                    })
+                            .then(response => {
+                              if (response.ok) {
+                                return response.json();
+                              } else {
+                                throw new Error("Failed to complete event.");
+                              }
+                            })
+                            .then(data => {
+                              alert("Event marked as completed!");
+                              location.reload(); // Reload the page to show the next upcoming event
+                            })
+                            .catch(error => console.error("Error:", error));
+                  });
+                });
+              </script>
+
+            <!-- Incomplete Events Card -->
             <div class="col-12 col-lg-12 mb-4">
               <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between">
                   <ul class="nav nav-pills" role="tablist">
                     <li class="nav-item">
                       <button type="button" class="nav-link active" role="tab">
-                        Incomplete Tasks for Upcoming Event
+                        Incomplete Tasks for All Incomplete Events
                       </button>
                     </li>
                   </ul>
-                  <div id="taskStatusChart" style="width: 150px; height: 150px;"></div>
                 </div>
                 <div class="card-body">
-                  <!-- Display the next event name -->
-                  <h6 class="mb-3">Next event is: <span th:text="${events[0].eventName}"></span></h6>
-                  <div class="table-responsive" id="eventTable">
-                    <table class="table table-hover">
-                      <thead>
-                      <tr>
-                        <th>Task Name</th>
-                        <th>Assigned Employee</th>
-                        <th>Status</th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      <!-- Thymeleaf iteration to get tasks for the next event -->
-                      <tr th:each="task : ${eventTasks[events[0].eventID]}">
-                        <td th:text="${task.taskName}">Task Name</td>
-                        <td th:text="${task.assignedEmployee?.username != null ? task.assignedEmployee?.username : 'Unassigned'}">Employee</td>
-                        <td>
-    <span th:class="'badge ' +
-                  (${task.taskStatus} == 'Completed' ? 'bg-label-success' : '') +
-                  (${task.taskStatus} == 'Not Started' ? 'bg-label-danger' : '') +
-                  (${task.taskStatus} == 'Started' ? 'bg-label-warning' : '')">
-        <span th:text="${task.taskStatus}"></span>
-  </span>
-                        </td>
-                      </tr>
-                      </tbody>
-                    </table>
+                  <div class="row">
+                    <!-- Loop through the incomplete events and create a pie chart for each -->
+                    <div class="col-12 col-md-4 mb-4" th:each="event : ${incompleteEvents}">
+                      <div class="card">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                          <h6 th:text="${event.eventName}"></h6>
+                          <div style="width: 150px; height: 150px; cursor: pointer;" th:id="'taskStatusChart_' + ${event.eventID}"></div>
+                        </div>
+                        <div class="card-body">
+                          <!-- Task Status Counts (Hidden Inputs) -->
+                          <input type="hidden" th:id="'notStartedCount_' + ${event.eventID}" th:value="${#lists.size(eventTasks[event.eventID].?[taskStatus == 'Not Started'])}">
+                          <input type="hidden" th:id="'startedCount_' + ${event.eventID}" th:value="${#lists.size(eventTasks[event.eventID].?[taskStatus == 'Started'])}">
+                          <input type="hidden" th:id="'completedCount_' + ${event.eventID}" th:value="${#lists.size(eventTasks[event.eventID].?[taskStatus == 'Completed'])}">
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- /Incomplete Tasks Table -->
+            <!-- /Incomplete Events Card -->
 
-            <!-- Hidden Inputs to Store Task Status Counts -->
-            <input type="hidden" id="notStartedCount" th:value="${#lists.size(eventTasks[events[0].eventID].?[taskStatus == 'Not Started'])}">
-            <input type="hidden" id="startedCount" th:value="${#lists.size(eventTasks[events[0].eventID].?[taskStatus == 'Started'])}">
-
-            <!-- JS Function creates pie chart-->
-            <!-- Code comes from ChatGPT prompt: Is it possible to have a small hoverable pie chart next to the headings of
-            the table that shows how many of the tasks are "Not Started" and how many are "Started",
-             the pie chart can have the same colours as the statuses to reduce confusion.  -->
+            <!-- JS Function creates pie chart for each event -->
             <script>
               document.addEventListener("DOMContentLoaded", function () {
-                let notStartedCount = parseInt(document.getElementById("notStartedCount").value) || 0;
-                let startedCount = parseInt(document.getElementById("startedCount").value) || 0;
+                // Loop through each incomplete event and create a pie chart
+                let incompleteEvents = /*[[${incompleteEvents}]]*/ [];
+                incompleteEvents.forEach(event => {
+                  let notStartedCount = parseInt(document.getElementById('notStartedCount_' + event.eventID).value) || 0;
+                  let startedCount = parseInt(document.getElementById('startedCount_' + event.eventID).value) || 0;
+                  let completedCount = parseInt(document.getElementById('completedCount_' + event.eventID).value) || 0;
 
-                var options = {
-                  series: [notStartedCount, startedCount],
-                  chart: {
-                    type: "pie",
-                    width: 150,
-                    height: 150,
-                    animations: { enabled: false },
-                    tooltip: { enabled: true }
-                  },
-                  labels: ["Not Started", "Started"],
-                  colors: ["#d9534f", "#f0ad4e"], // Red for Not Started, Yellow for Started
-                  legend: { show: false },
-                  dataLabels: { enabled: false }
-                };
+                  var options = {
+                    series: [notStartedCount, startedCount, completedCount],
+                    chart: {
+                      type: "pie",
+                      width: 150,
+                      height: 150,
+                      animations: { enabled: false },
+                      tooltip: { enabled: true },
+                      events: {
+                        dataPointSelection: function(event, chartContext, config) {
+                          let selectedIndex = config.dataPointIndex;
+                          if (selectedIndex === 0) toggleTaskList(event.eventID, "notStartedTable_" + event.eventID);
+                          if (selectedIndex === 1) toggleTaskList(event.eventID, "startedTable_" + event.eventID);
+                          if (selectedIndex === 2) toggleTaskList(event.eventID, "completedTable_" + event.eventID);
+                        }
+                      }
+                    },
+                    labels: ["Not Started", "Started", "Completed"],
+                    colors: ["#d9534f", "#f0ad4e", "#5cb85c"],
+                    legend: { show: false },
+                    dataLabels: { enabled: false }
+                  };
 
-                var chart = new ApexCharts(document.querySelector("#taskStatusChart"), options);
-                chart.render();
+                  var chart = new ApexCharts(document.querySelector('#taskStatusChart_' + event.eventID), options);
+                  chart.render();
+                });
+
+                // Expand/Collapse Task Lists for each event
+                function toggleTaskList(eventID, listId) {
+                  let element = document.getElementById(listId);
+                  element.style.display = (element.style.display === "none") ? "block" : "none";
+                }
               });
             </script>
 
+
+
             <!-- Most Used Roles for Tasks -->
-            <div class="col-md-6 col-lg-6 order-1 mb-4">
+            <div class="col-md-6 col-lg-6 mb-4">
               <div class="card h-100">
                 <div class="card-header">
                   <ul class="nav nav-pills" role="tablist">
